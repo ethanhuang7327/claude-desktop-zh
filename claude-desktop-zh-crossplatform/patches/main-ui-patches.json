@@ -1,0 +1,9 @@
+[
+  {
+    "description": "Support Chinese locale codes in Claude Desktop language allowlist",
+    "kind": "locale-allowlist",
+    "required": true,
+    "find": "[\"en-US\",\"de-DE\",\"fr-FR\",\"ko-KR\",\"ja-JP\",\"es-419\",\"es-ES\",\"it-IT\",\"hi-IN\",\"pt-BR\",\"id-ID\"]",
+    "replaceTemplate": "[\"en-US\",\"de-DE\",\"fr-FR\",\"ko-KR\",\"ja-JP\",\"es-419\",\"es-ES\",\"it-IT\",\"hi-IN\",\"pt-BR\",\"id-ID\",\"{lang}\"]"
+  }
+]
