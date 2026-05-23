@@ -223,6 +223,26 @@ def install_language_resources(app: Path, lang_code: str) -> None:
     install_statsig_locale(app, lang_code)
 
 
+def disable_compressed_asset_cache(app: Path) -> None:
+    assets_dir = app / FRONTEND_ASSETS_REL
+    if not assets_dir.is_dir():
+        print("Compressed asset cache: assets directory not found, skipped")
+        return
+
+    renamed = 0
+    for asset in sorted(list(assets_dir.glob("*.js")) + list(assets_dir.glob("*.css"))):
+        compressed = asset.with_name(asset.name + ".zst")
+        if not compressed.is_file():
+            continue
+        backup = compressed.with_name(compressed.name + ".bak")
+        if backup.exists():
+            continue
+        compressed.rename(backup)
+        renamed += 1
+
+    print(f"Compressed asset cache: disabled {renamed} .zst file(s)")
+
+
 def align4(value: int) -> int:
     return value + ((4 - (value % 4)) % 4)
 
@@ -860,6 +880,7 @@ def main() -> int:
     patch_language_whitelist(patched_app, lang_codes)
     patch_hardcoded_frontend_strings(patched_app, lang_code)
     patch_language_display_names(patched_app)
+    disable_compressed_asset_cache(patched_app)
     if args.advanced_asar_patch:
         patch_hardcoded_main_process_menu_labels(patched_app, lang_code)
     else:
